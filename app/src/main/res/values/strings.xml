@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ARTest2</string>
+    <string name="text.place_image_inside_the_dotted_square">Place image inside the dotted square</string>
+    <string name="text.wolverine">Wolverine</string>
+    <string name="text.about_wolverine">Wolverine is a fictional character appearing in American comic books published by Marvel Comics, mostly in association with the X-Men. He is a mutant who possesses animal-keen senses, enhanced physical capabilities, powerful regenerative ability known as a healing factor, and three retractable claws in each hand.</string>
+    <string name="text.click_here">Click Here</string>
+    <string name="text.welcome_to_earth">Welcome to Earth</string>
+</resources>
