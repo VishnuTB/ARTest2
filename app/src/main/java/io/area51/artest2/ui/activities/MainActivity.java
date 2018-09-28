@@ -19,6 +19,7 @@ import java.util.Map;
 import io.area51.artest2.R;
 import io.area51.artest2.nodes.AugmentedEarthLayoutNode;
 import io.area51.artest2.nodes.AugmentedWolverineLayoutNode;
+import io.area51.artest2.nodes.DefaultLayoutNode;
 import io.area51.artest2.ui.fragments.AugmentedImageFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private final String TAG = MainActivity.class.getSimpleName();
     private final Map<AugmentedImage, AugmentedWolverineLayoutNode> wolverineLayoutNodeHashMap = new HashMap<>();
     private final Map<AugmentedImage, AugmentedEarthLayoutNode> earthLayoutNodeHashMap = new HashMap<>();
+    private final Map<AugmentedImage, DefaultLayoutNode> defaultLayoutNodeHashMap = new HashMap<>();
     public ArFragment arFragment;
     private View introView;
 
@@ -67,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
                 case PAUSED:
                     String text = "Detected Image " + augmentedImage.getIndex();
                     Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-                    Log.e(TAG, "PAUSED : Image Name ::: " + augmentedImage.getName());
+                    Log.i(TAG, "PAUSED : Image Name ::: " + augmentedImage.getName());
                     break;
 
                 case TRACKING:
                     introView.setVisibility(View.GONE);
-                    Log.e(TAG, "TRACKING : Image Name ::: " + augmentedImage.getName());
+                    Log.d(TAG, "TRACKING : Image Name ::: " + augmentedImage.getName());
                     switch (augmentedImage.getName()) {
                         case AugmentedImageFragment.DEFAULT_IMAGE_1:
                             if (!earthLayoutNodeHashMap.containsKey(augmentedImage)) {
@@ -94,11 +96,33 @@ public class MainActivity extends AppCompatActivity {
                                         .addChild(wolverineLayoutNode);
                             }
                             break;
+
+                        default:
+                            if (!defaultLayoutNodeHashMap.containsKey(augmentedImage)) {
+                                DefaultLayoutNode defaultLayoutNode = new DefaultLayoutNode(this);
+                                defaultLayoutNode.setAugmentedImage(augmentedImage);
+                                defaultLayoutNodeHashMap.put(augmentedImage, defaultLayoutNode);
+                                arFragment.getArSceneView()
+                                        .getScene()
+                                        .addChild(defaultLayoutNode);
+                            }
+                            break;
                     }
                     break;
 
                 case STOPPED:
-                    wolverineLayoutNodeHashMap.remove(augmentedImage);
+                    Log.e(TAG, "STOPPED updateFrame: Image Name ::: " + augmentedImage.getName());
+                    switch (augmentedImage.getName()) {
+                        case AugmentedImageFragment.DEFAULT_IMAGE_1:
+                            earthLayoutNodeHashMap.remove(augmentedImage);
+                            break;
+                        case AugmentedImageFragment.DEFAULT_IMAGE_2:
+                            wolverineLayoutNodeHashMap.remove(augmentedImage);
+                            break;
+                        default:
+                            defaultLayoutNodeHashMap.remove(augmentedImage);
+                            break;
+                    }
                     break;
             }
         }

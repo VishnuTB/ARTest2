@@ -26,6 +26,7 @@ public class AugmentedImageFragment extends ArFragment {
     private static final String DEFAULT_DATABASE_NAME = "image_database.imgdb";
 
     private static final double MIN_OPENGL_VERSION = 3.0;
+    private static final String IMAGE_PATH = "https://www.famousbirthdays.com/faces/jackman-hugh-image.jpg";
     private String TAG = AugmentedImageFragment.class.getSimpleName();
 
     @Override
@@ -61,6 +62,7 @@ public class AugmentedImageFragment extends ArFragment {
     @Override
     protected Config getSessionConfiguration(Session session) {
         Config config = super.getSessionConfiguration(session);
+        config.setFocusMode(Config.FocusMode.AUTO);
         if (!setupAugmentedImageDatabase(config, session)) {
             Toast.makeText(getActivity(), "Could not setup augmented image database", Toast.LENGTH_SHORT).show();
         }
@@ -88,6 +90,21 @@ public class AugmentedImageFragment extends ArFragment {
 //        }
         //endregion
 
+        //region From Image path
+//        Glide.with(getActivity())
+//                .asBitmap()
+//                .load(IMAGE_PATH)
+//                .into(new SimpleTarget<Bitmap>() {
+//                    @Override
+//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+//                        Toast.makeText(getActivity(), "Image loaded from path", Toast.LENGTH_SHORT).show();
+//                        augmentedImageDatabase.addImage(DEFAULT_IMAGE_1, resource);
+//                        config.setAugmentedImageDatabase(augmentedImageDatabase);
+//                        session.configure(config);
+//                    }
+//                });
+        //endregion
+
         //region From local database
         try (InputStream is = getContext().getAssets().open(DEFAULT_DATABASE_NAME)) {
             augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, is);
@@ -96,7 +113,6 @@ public class AugmentedImageFragment extends ArFragment {
             Log.e(TAG, "IO exception loading augmented image database.", e);
             return false;
         }
-        //endregion
 
         config.setAugmentedImageDatabase(augmentedImageDatabase);
         session.configure(config);
