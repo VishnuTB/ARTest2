@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,8 @@ import com.google.ar.sceneform.ux.ArFragment;
 
 import java.io.IOException;
 import java.io.InputStream;
+
+import timber.log.Timber;
 
 public class AugmentedImageFragment extends ArFragment {
 
@@ -38,12 +39,12 @@ public class AugmentedImageFragment extends ArFragment {
                     .getDeviceConfigurationInfo()
                     .getGlEsVersion();
             if (Double.parseDouble(openGlVersionString) < MIN_OPENGL_VERSION) {
-                Log.e(TAG, "Sceneform requires OpenGL ES 3.0 or later");
+                Timber.i("Sceneform requires OpenGL ES 3.0 or later");
                 Toast.makeText(context, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_SHORT).show();
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
-            Log.e(TAG, "Sceneform requires OpenGL ES 3.0 or later");
+            Timber.i("Sceneform requires OpenGL ES 3.0 or later");
             Toast.makeText(context, "Sceneform requires OpenGL ES 3.0 or later", Toast.LENGTH_SHORT).show();
         }
     }
@@ -91,18 +92,18 @@ public class AugmentedImageFragment extends ArFragment {
         //endregion
 
         //region From Image path
-//        Glide.with(getActivity())
-//                .asBitmap()
-//                .load(IMAGE_PATH)
-//                .into(new SimpleTarget<Bitmap>() {
-//                    @Override
-//                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-//                        Toast.makeText(getActivity(), "Image loaded from path", Toast.LENGTH_SHORT).show();
-//                        augmentedImageDatabase.addImage(DEFAULT_IMAGE_1, resource);
-//                        config.setAugmentedImageDatabase(augmentedImageDatabase);
-//                        session.configure(config);
-//                    }
-//                });
+        /*Glide.with(getActivity())
+                .asBitmap()
+                .load(IMAGE_PATH)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        Toast.makeText(getActivity(), "Image loaded from path", Toast.LENGTH_SHORT).show();
+                        augmentedImageDatabase.addImage(DEFAULT_IMAGE_1, resource);
+                        config.setAugmentedImageDatabase(augmentedImageDatabase);
+                        session.configure(config);
+                    }
+                });*/
         //endregion
 
         //region From local database
@@ -110,14 +111,13 @@ public class AugmentedImageFragment extends ArFragment {
             augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, is);
         } catch (IOException e) {
             Toast.makeText(getContext(), "Unable to load ImageDatabase", Toast.LENGTH_SHORT).show();
-            Log.e(TAG, "IO exception loading augmented image database.", e);
+            Timber.e("IO exception loading augmented image database");
             return false;
         }
 
         config.setAugmentedImageDatabase(augmentedImageDatabase);
         session.configure(config);
         //endregion
-
 
         return true;
 

@@ -2,7 +2,6 @@ package io.area51.artest2.nodes;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 
 import com.google.ar.core.AugmentedImage;
 import com.google.ar.sceneform.AnchorNode;
@@ -15,11 +14,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import io.area51.artest2.R;
+import timber.log.Timber;
 
 public class DefaultLayoutNode extends AnchorNode {
 
-    private static final String TAG = DefaultLayoutNode.class.getSimpleName();
-    private static CompletableFuture<ViewRenderable> completableFutureDefault;
+    private CompletableFuture<ViewRenderable> completableFutureDefault;
     private AugmentedImage augmentedImage;
 
     public DefaultLayoutNode(Context context) {
@@ -40,7 +39,7 @@ public class DefaultLayoutNode extends AnchorNode {
             CompletableFuture.allOf(completableFutureDefault)
                     .thenAccept((Void aVoid) -> setAugmentedImage(augmentedImage))
                     .exceptionally(throwable -> {
-                        Log.e(TAG, "Exception loading", throwable);
+                        Timber.i("Exception loading Layout");
                         return null;
                     })
                     .handle((notUsed, throwable) -> {

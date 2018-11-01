@@ -2,7 +2,6 @@ package io.area51.artest2.ui.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -21,6 +20,7 @@ import io.area51.artest2.nodes.AugmentedEarthLayoutNode;
 import io.area51.artest2.nodes.AugmentedWolverineLayoutNode;
 import io.area51.artest2.nodes.DefaultLayoutNode;
 import io.area51.artest2.ui.fragments.AugmentedImageFragment;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,12 +69,12 @@ public class MainActivity extends AppCompatActivity {
                 case PAUSED:
                     String text = "Detected Image " + augmentedImage.getIndex();
                     Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, "PAUSED : Image Name ::: " + augmentedImage.getName());
+                    Timber.i("PAUSED : Image Name ::: %s", augmentedImage.getName());
                     break;
 
                 case TRACKING:
                     introView.setVisibility(View.GONE);
-                    Log.d(TAG, "TRACKING : Image Name ::: " + augmentedImage.getName());
+                    Timber.i("TRACKING : Image Name ::: %s", augmentedImage.getName());
                     switch (augmentedImage.getName()) {
                         case AugmentedImageFragment.DEFAULT_IMAGE_1:
                             if (!earthLayoutNodeHashMap.containsKey(augmentedImage)) {
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case STOPPED:
-                    Log.e(TAG, "STOPPED updateFrame: Image Name ::: " + augmentedImage.getName());
+                    Timber.i("STOPPED updateFrame: Image Name ::: %s", augmentedImage.getName());
                     switch (augmentedImage.getName()) {
                         case AugmentedImageFragment.DEFAULT_IMAGE_1:
                             earthLayoutNodeHashMap.remove(augmentedImage);

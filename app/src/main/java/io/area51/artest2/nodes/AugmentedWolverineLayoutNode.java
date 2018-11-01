@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
-import android.util.Log;
 import android.view.View;
 
 import com.google.ar.core.AugmentedImage;
@@ -18,11 +17,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import io.area51.artest2.R;
+import timber.log.Timber;
 
 public class AugmentedWolverineLayoutNode extends AnchorNode {
 
-    private static final String TAG = AugmentedWolverineLayoutNode.class.getSimpleName();
-    private static CompletableFuture<ViewRenderable> completableFutureWolverine;
+    private CompletableFuture<ViewRenderable> completableFutureWolverine;
     private AugmentedImage augmentedImage;
 
     public AugmentedWolverineLayoutNode(Context context) {
@@ -43,7 +42,7 @@ public class AugmentedWolverineLayoutNode extends AnchorNode {
             CompletableFuture.allOf(completableFutureWolverine)
                     .thenAccept((Void aVoid) -> setAugmentedImage(augmentedImage))
                     .exceptionally(throwable -> {
-                        Log.e(TAG, "Exception loading", throwable);
+                        Timber.i("Exception loading Layout");
                         return null;
                     })
                     .handle((notUsed, throwable) -> {
