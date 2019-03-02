@@ -3,6 +3,8 @@ package io.area51.artest2.ui.fragments;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -28,7 +30,6 @@ public class AugmentedImageFragment extends ArFragment {
 
     private static final double MIN_OPENGL_VERSION = 3.0;
     private static final String IMAGE_PATH = "https://www.famousbirthdays.com/faces/jackman-hugh-image.jpg";
-    private String TAG = AugmentedImageFragment.class.getSimpleName();
 
     @Override
     public void onAttach(Context context) {
@@ -79,16 +80,16 @@ public class AugmentedImageFragment extends ArFragment {
         }
 
         //region Dynamic database creation
-//        augmentedImageDatabase = new AugmentedImageDatabase(session);
-//        Bitmap bitmap = null;
-//        try (InputStream inputStream = getContext().getAssets().open(DEFAULT_IMAGE_1)) {
-//            bitmap = BitmapFactory.decodeStream(inputStream);
-//        } catch (IOException e) {
-//            Log.e(TAG, "I/O exception loading augmented image bitmap.", e);
-//        }
-//        if (bitmap != null) {
-//            augmentedImageDatabase.addImage(DEFAULT_IMAGE_1, bitmap);
-//        }
+        augmentedImageDatabase = new AugmentedImageDatabase(session);
+        Bitmap bitmap = null;
+        try (InputStream inputStream = getContext().getAssets().open(DEFAULT_IMAGE_1)) {
+            bitmap = BitmapFactory.decodeStream(inputStream);
+        } catch (IOException e) {
+            Timber.e(e, "I/O exception loading augmented image bitmap.");
+        }
+        if (bitmap != null) {
+            augmentedImageDatabase.addImage(DEFAULT_IMAGE_1, bitmap);
+        }
         //endregion
 
         //region From Image path
@@ -107,13 +108,13 @@ public class AugmentedImageFragment extends ArFragment {
         //endregion
 
         //region From local database
-        try (InputStream is = getContext().getAssets().open(DEFAULT_DATABASE_NAME)) {
-            augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, is);
-        } catch (IOException e) {
-            Toast.makeText(getContext(), "Unable to load ImageDatabase", Toast.LENGTH_SHORT).show();
-            Timber.e("IO exception loading augmented image database");
-            return false;
-        }
+//        try (InputStream is = getContext().getAssets().open(DEFAULT_DATABASE_NAME)) {
+//            augmentedImageDatabase = AugmentedImageDatabase.deserialize(session, is);
+//        } catch (IOException e) {
+//            Toast.makeText(getContext(), "Unable to load ImageDatabase", Toast.LENGTH_SHORT).show();
+//            Timber.e("IO exception loading augmented image database");
+//            return false;
+//        }
 
         config.setAugmentedImageDatabase(augmentedImageDatabase);
         session.configure(config);

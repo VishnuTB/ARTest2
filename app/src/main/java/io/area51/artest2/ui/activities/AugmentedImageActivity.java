@@ -1,5 +1,7 @@
 package io.area51.artest2.ui.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -22,19 +24,23 @@ import io.area51.artest2.nodes.DefaultLayoutNode;
 import io.area51.artest2.ui.fragments.AugmentedImageFragment;
 import timber.log.Timber;
 
-public class MainActivity extends AppCompatActivity {
+public class AugmentedImageActivity extends AppCompatActivity {
 
-    private final String TAG = MainActivity.class.getSimpleName();
     private final Map<AugmentedImage, AugmentedWolverineLayoutNode> wolverineLayoutNodeHashMap = new HashMap<>();
     private final Map<AugmentedImage, AugmentedEarthLayoutNode> earthLayoutNodeHashMap = new HashMap<>();
     private final Map<AugmentedImage, DefaultLayoutNode> defaultLayoutNodeHashMap = new HashMap<>();
     public ArFragment arFragment;
     private View introView;
 
+    public static Intent getIntent(Context context) {
+        return new Intent(context, AugmentedImageActivity.class);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_augmented_image);
+
 
         arFragment = (ArFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.ux_fragment);
@@ -43,15 +49,6 @@ public class MainActivity extends AppCompatActivity {
         arFragment.getArSceneView()
                 .getScene()
                 .addOnUpdateListener(this::updateFrame);
-
-//        arFragment.getArSceneView()
-//                .getScene()
-//                .addOnUpdateListener(frameTime -> {
-//                    arFragment.onUpdate(frameTime);
-//                    MainActivity.this.onUpdate();
-//                });
-
-//        initializeGallery();
 
     }
 
